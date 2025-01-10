@@ -6,24 +6,6 @@
 
 ---
 
-## Fonctionnalités principales
-
-- **Recherche d'adresses IP** : Récupère des informations sur une adresse IP (localisation, organisation, etc.).
-- **Recherche avancée Google (allintext)** : Effectue des recherches avancées sur Google en utilisant l'opérateur `allintext` pour obtenir des résultats plus ciblés.
-- **Enregistrement des résultats** : Les résultats des recherches `allintext` sont automatiquement enregistrés dans des fichiers JSON pour une analyse ultérieure.
-- **Interface en ligne de commande** : Utilisez un menu interactif pour effectuer les recherches directement depuis votre terminal.
-
----
-
-Voici le README mis à jour avec les fonctionnalités et les détails du projet basé sur ce que nous avons réalisé jusqu'à présent :
-
-# OpenSpy
-
-![OpenSpy Logo](logo.jpg)
-
-**OpenSpy** est un outil OSINT (Open Source Intelligence) open source conçu pour les professionnels de la cybersécurité, les enquêteurs et les développeurs. Il vous permet de rechercher des informations sur des adresses IP, d'effectuer des recherches avancées sur Google via l'opérateur `allintext` et d'enregistrer les résultats dans des fichiers JSON.
-
----
 
 ## Fonctionnalités principales
 
