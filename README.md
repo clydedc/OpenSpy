@@ -15,9 +15,70 @@
 
 ---
 
+Voici le README mis à jour avec les fonctionnalités et les détails du projet basé sur ce que nous avons réalisé jusqu'à présent :
+
+# OpenSpy
+
+![OpenSpy Logo](logo.jpg)
+
+**OpenSpy** est un outil OSINT (Open Source Intelligence) open source conçu pour les professionnels de la cybersécurité, les enquêteurs et les développeurs. Il vous permet de rechercher des informations sur des adresses IP, d'effectuer des recherches avancées sur Google via l'opérateur `allintext` et d'enregistrer les résultats dans des fichiers JSON.
+
+---
+
+## Fonctionnalités principales
+
+- **Recherche d'adresses IP** : Récupère des informations sur une adresse IP (localisation, organisation, etc.).
+- **Recherche avancée Google (allintext)** : Effectue des recherches avancées sur Google en utilisant l'opérateur `allintext` pour obtenir des résultats plus ciblés.
+- **Enregistrement des résultats** : Les résultats des recherches `allintext` sont automatiquement enregistrés dans des fichiers JSON pour une analyse ultérieure.
+- **Interface en ligne de commande** : Utilisez un menu interactif pour effectuer les recherches directement depuis votre terminal.
+
+---
+
+## Utilisation
+
+Une fois l'outil installé, vous pouvez l'utiliser directement depuis le terminal pour effectuer des recherches. Voici comment l'utiliser :
+Recherche d'adresse IP
+
+Cette fonction vous permet de rechercher des informations sur une adresse IP spécifique.
+
+```
+python main.py
+```
+
+Le programme vous demandera d'entrer l'adresse IP à rechercher et affichera des informations comme la ville, le pays, l'organisation, etc.
+Recherche Google avancée avec allintext
+
+Vous pouvez effectuer des recherches avancées sur Google en utilisant l'opérateur allintext. Le programme vous permettra d'entrer une requête et d'exécuter la recherche automatiquement.
+
+```
+python main.py
+```
+
+Le programme vous demandera ensuite d'entrer votre requête allintext et affichera les résultats sous forme de titre, URL et extrait.
+
+Les résultats seront également enregistrés dans un fichier JSON dans le dossier save/.
+Fonctionnement
+## Recherche IP
+
+La recherche d'une adresse IP est effectuée via le service ipinfo.io. Vous entrez l'IP et le programme envoie une requête pour obtenir des informations sur cette adresse. Les résultats incluent la ville, le pays, l'organisation, et d'autres informations pertinentes.
+Recherche allintext
+
+La recherche Google avec l'opérateur allintext permet de cibler des résultats très spécifiques. Vous entrez une requête, et l'outil effectue une recherche sur Google pour en extraire les résultats. Le programme analyse ensuite la page HTML pour en extraire le titre, l'URL et un extrait de chaque résultat.
+
+Les résultats sont ensuite sauvegardés dans un fichier JSON sous le dossier save/, avec un nom basé sur un timestamp pour chaque recherche effectuée
+
+
+
+
+---
+
 ## Installation
 
 Pour installer **OpenSpy**, suivez ces étapes :
+
+```
+pip install -r requirements.txt
+```
 
 ---
 
