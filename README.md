@@ -49,8 +49,20 @@ La recherche Google avec l'opérateur allintext permet de cibler des résultats 
 
 Les résultats sont ensuite sauvegardés dans un fichier JSON sous le dossier save/, avec un nom basé sur un timestamp pour chaque recherche effectuée
 
+---
 
+## Vous pouvez crée votre propre API/Search Engine Facilement
 
+- https://developers.google.com/custom-search/v1/overview?hl=fr (Avoir votre clé API , gratuit 100 rêquete par jours (nécessite de avoir un compte google))
+
+- https://programmablesearchengine.google.com/controlpanel/all (Search Engine , gratuit )
+
+Vous aurez un lien comme ce ci : https://cse.google.com/cse?cx=
+
+```
+cx=CXID
+```
+                                                             
 
 ---
 

@@ -1,5 +1,4 @@
 import requests
-import subprocess
 import json
 import time
 import os
@@ -7,7 +6,13 @@ from consolemenu import ConsoleMenu
 from consolemenu.items import FunctionItem
 from bs4 import BeautifulSoup
 from colorama import *
-from pystyle import * 
+from pystyle import *
+from googleapiclient.discovery import build
+
+
+API_KEY = "AIzaSyCwy21rJUyetjzCE_SqSGpXTc0rre6LUKk"
+CSE_ID = "1128edad0e91c4a6b"  
+
 
 def rechercher_ip():
     ip = input("Entrez l'adresse IP à rechercher : ")
@@ -35,65 +40,75 @@ def rechercher_ip():
 
 
 def recherche_allintext(query):
-    query = query.replace(" ", "+")
-    url = f"https://www.google.com/search?q=allintext:{query}"
-    headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36"
-    }
+    """
+    Effectue une recherche Google avec le paramètre allintext en utilisant l'API Google Custom Search.
+    """
     try:
-        response = requests.get(url, headers=headers)
-        response.raise_for_status()
-        return response.text
+
+        service = build("customsearch", "v1", developerKey=API_KEY)
+
+        res = service.cse().list(q=f"allintext:{query}", cx=CSE_ID).execute()
+
+        if "items" in res:
+            return res["items"]
+        else:
+            print("🔍 | Aucun résultat trouvé.")
+            return []
     except KeyboardInterrupt:
         Write.Print("Au revoir 🖐️", Colors.red_to_white)
-    except requests.exceptions.RequestException as e:
-        print(f"❌ | Erreur lors de la requête HTTP : {e}")
-        return None
+    except Exception as e:
+        print(f"❌ | Une erreur s'est produite lors de la recherche : {e}")
+        return []
 
-def analyser_resultats(page_html):
+
+def analyser_resultats(results):
+    """
+    Analyse et reformate les résultats obtenus depuis l'API Google Custom Search.
+    """
     try:
-        if not page_html:
-            print("⚠️ | Aucun contenu HTML à analyser.")
-            return []
-        soup = BeautifulSoup(page_html, "html.parser")
-        results = []
-        items = soup.find_all("div", class_="tF2Cxc")
-        for item in items:
-            link = item.find("a")
-            title = link.text if link else "Titre non trouvé"
-            url = link.get("href") if link else "URL non trouvée"
-            snippet = item.find("span", class_="aCOpRe")
-            snippet_text = snippet.text if snippet else "Extrait non trouvé"
-            results.append({
+        formatted_results = []
+        for result in results:
+            title = result.get("title", "Titre non trouvé")
+            url = result.get("link", "Lien non trouvé")
+            snippet = result.get("snippet", "Extrait non trouvé")
+            formatted_results.append({
                 "title": title.strip(),
                 "url": url.strip(),
-                "snippet": snippet_text.strip()
+                "snippet": snippet.strip()
             })
-        return results
+        return formatted_results
     except KeyboardInterrupt:
         Write.Print("Au revoir 🖐️", Colors.red_to_white)
 
+
 def effectuer_recherche(query):
+    """
+    Effectue la recherche Google et affiche les résultats.
+    """
     try:
-        page_html = recherche_allintext(query)
-        results = analyser_resultats(page_html)
-        if results:
+        results = recherche_allintext(query)
+        formatted_results = analyser_resultats(results)
+        if formatted_results:
             print("\n🔍 | Résultats de la recherche :")
-            for idx, result in enumerate(results, start=1):
+            for idx, result in enumerate(formatted_results, start=1):
                 print(f"#{idx}")
                 print(f"   ➡️ Titre : {result['title']}")
                 print(f"   ➡️ Lien : {result['url']}")
                 print(f"   ➡️ Extrait : {result['snippet']}\n")
             choix = input("Voulez-vous enregistrer ces résultats dans un fichier ? (oui/non) : ").strip().lower()
             if choix == "oui":
-                enregistrer_resultats(results)
+                enregistrer_resultats(formatted_results)
         else:
             print("🔍 | Aucun résultat trouvé.")
             time.sleep(2)
     except KeyboardInterrupt:
         Write.Print("Au revoir 🖐️", Colors.red_to_white)
 
+
 def enregistrer_resultats(results):
+    """
+    Enregistre les résultats dans un fichier JSON.
+    """
     try:
         if not os.path.exists("save"):
             os.makedirs("save")
@@ -105,16 +120,21 @@ def enregistrer_resultats(results):
     except KeyboardInterrupt:
         Write.Print("Au revoir 🖐️", Colors.red_to_white)
 
+
 def main():
+    """
+    Menu principal de l'application.
+    """
     menu = ConsoleMenu("Menu principal 🔍 | OpenSpy ")
     item_ip = FunctionItem("Recherche IP", rechercher_ip)
     item_allintext = FunctionItem("Recherche allintext", lambda: effectuer_recherche(input("Entrez votre requête allintext: ")))
     menu.append_item(item_ip)
     menu.append_item(item_allintext)
     menu.show()
-try:
-    if __name__ == "__main__":
-        main()
-except KeyboardInterrupt:
-    Write.Print("Au revoir 🖐️", Colors.red_to_white)
 
+
+if __name__ == "__main__":
+    try:
+        main()
+    except KeyboardInterrupt:
+        Write.Print("Au revoir 🖐️", Colors.red_to_white)
