@@ -10,8 +10,8 @@ from pystyle import *
 from googleapiclient.discovery import build
 
 
-API_KEY = "AIzaSyCwy21rJUyetjzCE_SqSGpXTc0rre6LUKk"
-CSE_ID = "1128edad0e91c4a6b"  
+API_KEY = ""
+CSE_ID = ""  
 
 
 def rechercher_ip():
