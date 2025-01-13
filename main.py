@@ -1,7 +1,8 @@
 import requests
 import json
 import time
-import os, sys 
+import os, sys
+import whois
 from consolemenu import ConsoleMenu
 from consolemenu.items import FunctionItem
 from bs4 import BeautifulSoup
@@ -11,9 +12,9 @@ from googleapiclient.discovery import build
 
 
 API_KEY = ""
-CSE_ID = ""  
+CSE_ID = ""
 
-try: 
+try:
     os.system("cls || clear")
     print(Fore.GREEN, "[+] Veuillez définir le temps des résultat qui seront affiché --> ", Style.RESET_ALL, end='')
     clock_time = int(input())
@@ -25,8 +26,10 @@ try:
         menu = ConsoleMenu("Menu principal 🔍 | OpenSpy ")
         item_ip = FunctionItem("Recherche IP", rechercher_ip)
         item_allintext = FunctionItem("Recherche allintext", lambda: effectuer_recherche(input("Entrez votre requête allintext: ")))
+        item_whois = FunctionItem("Recherche WHOIS", rechercher_whois)
         menu.append_item(item_ip)
         menu.append_item(item_allintext)
+        menu.append_item(item_whois)
         menu.show()
 
     def rechercher_ip():
@@ -53,15 +56,30 @@ try:
         
             input("🔍 | OpenSpy | [LOG🟢] Appuyez sur Entrée pour revenir au menu...")
 
+    def rechercher_whois():
+        whois = input("Entrez le nom de domaine à rechercher : ")
+        print(f"Recherche d'informations WHOIS pour le domaine {whois}...\n")
+
+        try:
+            w = whois.whois(whois)
+            print(f"🔍 | OpenSpy | Domaine: {w.domain_name}")
+            print(f"🔍 | OpenSpy | Registrar: {w.registrar}")
+            print(f"🔍 | OpenSpy | Date de création: {w.creation_date}")
+            print(f"🔍 | OpenSpy | Date d'expiration: {w.expiration_date}")
+            print(f"🔍 | OpenSpy | Serveurs de noms: {w.name_servers}")
+            print(f"⏰ | OpenSpy | Le résultat se supprimera au bout du temps déterminé choisi. ")
+            time.sleep(clock_time)
+        except Exception as e:
+            print(f"🔍 | OpenSpy | [LOG🔴] Erreur lors de la récupération des informations WHOIS : {e}")
+        
+            input("🔍 | OpenSpy | [LOG🟢] Appuyez sur Entrée pour revenir au menu...")
 
     def recherche_allintext(query):
         """
         Effectue une recherche Google avec le paramètre allintext en utilisant l'API Google Custom Search.
         """
         try:
-
             service = build("customsearch", "v1", developerKey=API_KEY)
-
             res = service.cse().list(q=f"allintext:{query}", cx=CSE_ID).execute()
 
             if "items" in res:
@@ -77,24 +95,22 @@ try:
             time.sleep(clock_time)
             return []
 
-
     def analyser_resultats(results):
         """
         Analyse et reformate les résultats obtenus depuis l'API Google Custom Search.
         """
         formatted_results = []
         for result in results:
-                title = result.get("title", "Titre non trouvé")
-                url = result.get("link", "Lien non trouvé")
-                snippet = result.get("snippet", "Extrait non trouvé")
-                formatted_results.append({
-                    "title": title.strip(),
-                    "url": url.strip(),
-                    "snippet": snippet.strip()
-                })
-                time.sleep(clock_time)
+            title = result.get("title", "Titre non trouvé")
+            url = result.get("link", "Lien non trouvé")
+            snippet = result.get("snippet", "Extrait non trouvé")
+            formatted_results.append({
+                "title": title.strip(),
+                "url": url.strip(),
+                "snippet": snippet.strip()
+            })
+            time.sleep(clock_time)
         return formatted_results
-
 
     def effectuer_recherche(query):
         """
@@ -103,37 +119,33 @@ try:
         results = recherche_allintext(query)
         formatted_results = analyser_resultats(results)
         if formatted_results:
-                print("\n🔍 | Résultats de la recherche :")
-                for idx, result in enumerate(formatted_results, start=1):
-                    print(f"#{idx}")
-                    print(f"   ➡️ Titre : {result['title']}")
-                    print(f"   ➡️ Lien : {result['url']}")
-                    print(f"   ➡️ Extrait : {result['snippet']}\n")
-                choix = input("Voulez-vous enregistrer ces résultats dans un fichier ? (oui/non) : ").strip().lower()
-                if choix == "oui":
-                    enregistrer_resultats(formatted_results)
-                    time.sleep(clock_time)
+            print("\n🔍 | Résultats de la recherche :")
+            for idx, result in enumerate(formatted_results, start=1):
+                print(f"#{idx}")
+                print(f"   ➡️ Titre : {result['title']}")
+                print(f"   ➡️ Lien : {result['url']}")
+                print(f"   ➡️ Extrait : {result['snippet']}\n")
+            choix = input("Voulez-vous enregistrer ces résultats dans un fichier ? (oui/non) : ").strip().lower()
+            if choix == "oui":
+                enregistrer_resultats(formatted_results)
+                time.sleep(clock_time)
         else:
             print("🔍 | Aucun résultat trouvé.")
-
 
     def enregistrer_resultats(results):
         """
         Enregistre les résultats dans un fichier JSON.
         """
-        
         if not os.path.exists("save"):
             os.makedirs("save")
-            timestamp = int(time.time())
-            file_path = f"save/results_{timestamp}.json"
-            with open(file_path, "w", encoding="utf-8") as f:
-                json.dump(results, f, ensure_ascii=False, indent=4)
-            print(f"🔍 | Les résultats ont été enregistrés dans le fichier : {file_path}")
-
+        timestamp = int(time.time())
+        file_path = f"save/results_{timestamp}.json"
+        with open(file_path, "w", encoding="utf-8") as f:
+            json.dump(results, f, ensure_ascii=False, indent=4)
+        print(f"🔍 | Les résultats ont été enregistrés dans le fichier : {file_path}")
 
 except KeyboardInterrupt:
     Write.Print("Au revoir 🖐️", Colors.red_to_white)
-
 
 if __name__ == "__main__":
     try:
