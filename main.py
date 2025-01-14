@@ -2,13 +2,16 @@ import requests
 import json
 import time
 import os, sys
+import phonenumbers
 import whois
 from consolemenu import ConsoleMenu
 from consolemenu.items import FunctionItem
 from bs4 import BeautifulSoup
 from colorama import *
 from pystyle import *
+from phonenumbers import *
 from googleapiclient.discovery import build
+
 
 
 API_KEY = ""
@@ -25,9 +28,11 @@ try:
         """
         menu = ConsoleMenu("Menu principal 🔍 | OpenSpy ")
         item_ip = FunctionItem("Recherche IP", rechercher_ip)
+        item_phone = FunctionItem("Recherche numéro de téléphone", phone_number)
         item_allintext = FunctionItem("Recherche allintext", lambda: effectuer_recherche(input("Entrez votre requête allintext: ")))
         item_whois = FunctionItem("Recherche WHOIS", rechercher_whois)
         menu.append_item(item_ip)
+        menu.append_item(item_phone)
         menu.append_item(item_allintext)
         menu.append_item(item_whois)
         menu.show()
@@ -73,6 +78,24 @@ try:
             print(f"🔍 | OpenSpy | [LOG🔴] Erreur lors de la récupération des informations WHOIS : {e}")
         
             input("🔍 | OpenSpy | [LOG🟢] Appuyez sur Entrée pour revenir au menu...")
+
+
+    def phone_number():
+        number = input("Entrez le numéro de téléphone à rechercher : ")
+        try:
+            parsed_number = phonenumbers.parse(number)
+            print(f"🔍 | OpenSpy | Indicatif pays : {parsed_number.country_code}")
+            print(f"🔍 | OpenSpy | Numéro national : {parsed_number.national_number}")
+            print(f"🔍 | OpenSpy | Type de numéro : {phonenumbers.number_type(parsed_number)}")
+            print(f"🔍 | OpenSpy | Possibilité de numéro valide : {phonenumbers.is_possible_number(parsed_number)}")
+            print(f"🔍 | OpenSpy | Valide : {phonenumbers.is_valid_number(parsed_number)}")
+            print(f"⏰ | OpenSpy | Le résultat se supprimera au bout du temps déterminé choisi. ")
+            time.sleep(clock_time)
+        except phonenumbers.NumberParseException as e:
+            print(f"🔍 | OpenSpy | [LOG🔴] Erreur lors de l'analyse du numéro : {e}")
+            input("🔍 | OpenSpy | [LOG🟢] Appuyez sur Entrée pour revenir au menu...")
+
+
 
     def recherche_allintext(query):
         """
