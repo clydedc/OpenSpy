@@ -63,7 +63,7 @@ try:
         try:
             w = whois.whois(whois)
             print(f"🔍 | OpenSpy | Domaine: {w.domain_name}")
-            print(f"🔍 | OpenSpy | Registrar: {w.registrar}")
+            print(f"🔍 | OpenSpy | Registre: {w.registre}")
             print(f"🔍 | OpenSpy | Date de création: {w.creation_date}")
             print(f"🔍 | OpenSpy | Date d'expiration: {w.expiration_date}")
             print(f"🔍 | OpenSpy | Serveurs de noms: {w.name_servers}")
