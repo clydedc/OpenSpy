@@ -19,7 +19,10 @@ setup(
     install_requires=[
         "requests",
         "beautifulsoup4",
-        "stem"
+        "stem",
+        "console-menu",
+        "google-api-python-client",
+        "python-whois"
     ],
     entry_points={
         'console_scripts': [
