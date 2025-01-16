@@ -272,9 +272,3 @@ if __name__ == "__main__":
         Write.Print("\nAu revoir 🖐️", Colors.red_to_white)
         sys.exit(1)
 
-if __name__ == "__main__":
-    try:
-        main()
-    except KeyboardInterrupt:
-        Write.Print("\nAu revoir 🖐️", Colors.red_to_white)
-        sys.exit(1)
