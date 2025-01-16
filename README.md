@@ -109,5 +109,5 @@ pip install -r requirements.txt
 
 1. Clonez ce dépôt :
    ```bash
-   git clone https://github.com/votrecompte/OpenSpy.git
+   git clone https://github.com/clydedc/OpenSpy.git
    cd OpenSpy
