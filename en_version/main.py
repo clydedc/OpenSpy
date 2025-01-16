@@ -17,21 +17,23 @@ CSE_ID = ""
 
 try:
     os.system("cls || clear")
-    print(Fore.GREEN, "[+] Please set the display time for the results --> ", Style.RESET_ALL, end='')
+    print(Fore.GREEN, "[+] Please set the time for the results that will be displayed --> ", Style.RESET_ALL, end='')
     clock_time = int(input())
 except Exception as e:
     print(f"Error: {e}")
     sys.exit(1)
 
+
 def main():
     """
     Main menu of the application.
     """
-    menu = ConsoleMenu("Main Menu 🔍 | OpenSpy")
+    menu = ConsoleMenu("Main Menu 🔍 | OpenSpy ")
     item_ip = FunctionItem("IP Search", search_ip)
     item_phone = FunctionItem("Phone Number Search", phone_number)
     item_dns = FunctionItem("DNS Lookup", dns_lookup)
-    item_allintext = FunctionItem("Allintext Search", lambda: perform_search(input("Enter your allintext query: ")))
+    item_allintext = FunctionItem(
+        "Allintext Search", lambda: perform_search(input("Enter your allintext query: ")))
     item_whois = FunctionItem("WHOIS Search", search_whois)
     menu.append_item(item_ip)
     menu.append_item(item_phone)
@@ -40,9 +42,10 @@ def main():
     menu.append_item(item_whois)
     menu.show()
 
+
 def search_allintext(query):
     """
-    Perform a Google search with the allintext parameter using the Google Custom Search API.
+    Performs a Google search with the allintext parameter using the Google Custom Search API.
     """
     try:
         service = build("customsearch", "v1", developerKey=API_KEY)
@@ -61,9 +64,10 @@ def search_allintext(query):
         time.sleep(clock_time)
         return []
 
+
 def save_results(results):
     """
-    Save the results in a JSON file.
+    Saves the results to a JSON file.
     """
     if not os.path.exists("save"):
         os.makedirs("save")
@@ -71,11 +75,12 @@ def save_results(results):
     file_path = f"save/results_{timestamp}.json"
     with open(file_path, "w", encoding="utf-8") as f:
         json.dump(results, f, ensure_ascii=False, indent=4)
-    print(f"🔍 | Results have been saved to the file: {file_path}")
+    print(f"🔍 | The results have been saved in the file: {file_path}")
+
 
 def analyze_results(results):
     """
-    Analyze and reformat the results obtained from the Google Custom Search API.
+    Analyzes and reformats the results obtained from the Google Custom Search API.
     """
     formatted_results = []
     for result in results:
@@ -90,14 +95,15 @@ def analyze_results(results):
         time.sleep(clock_time)
     return formatted_results
 
+
 def perform_search(query):
     """
-    Perform a Google search and display the results.
+    Performs the Google search and displays the results.
     """
     results = search_allintext(query)
     formatted_results = analyze_results(results)
     if formatted_results:
-        print("\n🔍 | Search Results:")
+        print("\n🔍 | Search results:")
         for idx, result in enumerate(formatted_results, start=1):
             print(f"#{idx}")
             print(f"   ➡️ Title: {result['title']}")
@@ -109,6 +115,7 @@ def perform_search(query):
             time.sleep(clock_time)
     else:
         print("🔍 | No results found.")
+
 
 def search_ip():
     ip = input("Enter the IP address to search: ")
@@ -127,11 +134,13 @@ def search_ip():
         print(f"🔍 | OpenSpy | Location: {data.get('loc')}")
         print(f"🔍 | OpenSpy | Postal Code: {data.get('postal')}")
         print(f"🔍 | OpenSpy | Hostname: {data.get('hostname')}")
-        print(f"⏰ | OpenSpy | The result will be deleted after the chosen display time.")
+        print(f"⏰ | OpenSpy | The result will be deleted after the chosen time.")
         time.sleep(clock_time)
     except requests.exceptions.RequestException as e:
-        print(f"🔍 | OpenSpy | [LOG🔴] Error while retrieving information: {e}")
-        input("🔍 | OpenSpy | [LOG🟢] Press Enter to return to the menu...")
+        print(f"🔍 | OpenSpy | [LOG🔴] Error retrieving information: {e}")
+
+    input("🔍 | OpenSpy | [LOG🟢] Press Enter to return to the menu...")
+
 
 def search_whois():
     domain = input("Enter the domain name to search: ")
@@ -144,11 +153,13 @@ def search_whois():
         print(f"🔍 | OpenSpy | Creation Date: {w.creation_date}")
         print(f"🔍 | OpenSpy | Expiration Date: {w.expiration_date}")
         print(f"🔍 | OpenSpy | Name Servers: {w.name_servers}")
-        print(f"⏰ | OpenSpy | The result will be deleted after the chosen display time.")
+        print(f"⏰ | OpenSpy | The result will be deleted after the chosen time.")
         time.sleep(clock_time)
     except Exception as e:
-        print(f"🔍 | OpenSpy | [LOG🔴] Error while retrieving WHOIS information: {e}")
-        input("🔍 | OpenSpy | [LOG🟢] Press Enter to return to the menu...")
+        print(f"🔍 | OpenSpy | [LOG🔴] Error retrieving WHOIS information: {e}")
+
+    input("🔍 | OpenSpy | [LOG🟢] Press Enter to return to the menu...")
+
 
 def phone_number():
     number = input("Enter the phone number to search: ")
@@ -157,35 +168,37 @@ def phone_number():
         print(f"🔍 | OpenSpy | Country Code: {parsed_number.country_code}")
         print(f"🔍 | OpenSpy | National Number: {parsed_number.national_number}")
         print(f"🔍 | OpenSpy | Number Type: {phonenumbers.number_type(parsed_number)}")
-        print(f"🔍 | OpenSpy | Possible Number: {phonenumbers.is_possible_number(parsed_number)}")
-        print(f"🔍 | OpenSpy | Valid Number: {phonenumbers.is_valid_number(parsed_number)}")
-        print(f"⏰ | OpenSpy | The result will be deleted after the chosen display time.")
+        print(f"🔍 | OpenSpy | Valid Number Possibility: {phonenumbers.is_possible_number(parsed_number)}")
+        print(f"🔍 | OpenSpy | Valid: {phonenumbers.is_valid_number(parsed_number)}")
+        print(f"⏰ | OpenSpy | The result will be deleted after the chosen time.")
         time.sleep(clock_time)
     except phonenumbers.NumberParseException as e:
-        print(f"🔍 | OpenSpy | [LOG🔴] Error while parsing the number: {e}")
+        print(f"🔍 | OpenSpy | [LOG🔴] Error parsing number: {e}")
         input("🔍 | OpenSpy | [LOG🟢] Press Enter to return to the menu...")
+
 
 def dns_lookup():
     """
-    Perform a DNS lookup for a given domain.
+    Performs a DNS lookup for a given domain.
     """
     domain = input("Enter the domain to search: ")
     print(f"Performing DNS lookup for domain {domain}...\n")
-    dns_url = f"https://dns.google/query?name={domain}&type=A"
+    url = f"https://dns.google/query?name={domain}&type=A"
     try:
-        response = requests.get(dns_url)
+        response = requests.get(url)
         data = response.json()
-        print(f"🔍 | OpenSpy | DNS Lookup Results for {domain}:")
+        print(f"🔍 | OpenSpy | DNS lookup results for domain {domain}:")
         for record in data.get("Answer", []):
             print(f"🔍 | OpenSpy | Type: {record['type']}")
             print(f"🔍 | OpenSpy | Name: {record['name']}")
             print(f"🔍 | OpenSpy | TTL: {record['TTL']}")
             print(f"🔍 | OpenSpy | Data: {record['data']}\n")
-        print(f"⏰ | OpenSpy | The result will be deleted after the chosen display time.")
+        print(f"⏰ | OpenSpy | The result will be deleted after the chosen time.")
         time.sleep(clock_time)
     except requests.exceptions.RequestException as e:
-        print(f"🔍 | OpenSpy | [LOG🔴] Error while retrieving DNS information: {e}")
+        print(f"🔍 | OpenSpy | [LOG🔴] Error retrieving DNS information: {e}")
         input("🔍 | OpenSpy | [LOG🟢] Press Enter to return to the menu...")
+
 
 if __name__ == "__main__":
     try:
