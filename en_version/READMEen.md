@@ -4,6 +4,12 @@
 
 **OpenSpy** is an open-source OSINT (Open Source Intelligence) tool designed for cybersecurity professionals, investigators, and developers. It enables you to gather information on IP addresses, perform advanced Google searches using the `allintext` operator, and save the results in JSON files.
 
+<p align="center">
+<img src="https://img.shields.io/github/last-commit/clydedc/OpenSpy?style=flat">
+<img src="https://img.shields.io/github/stars/clydedc/OpenSpy?color=brightgreen">
+<img src="https://img.shields.io/github/forks/clydedc/OpenSpy?color=brightgreen">
+</p>
+
 ---
 
 ## Key Features
