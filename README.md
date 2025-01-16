@@ -16,6 +16,8 @@
 
 ---
 
+![OpenSpy Logo](logo.gif)
+
 ## Utilisation
 
 Une fois l'outil installé, vous pouvez l'utiliser directement depuis le terminal pour effectuer des recherches. Voici comment l'utiliser :
