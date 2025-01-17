@@ -29,7 +29,7 @@ setup(
             'openspy=openspy:main',
         ],
     },
-    keywords="OSINT, reconnaissance, dark web, google search, phone lookup",
+    keywords="OSINT, reconnaissance, google dark, google search, phone lookup",
     project_urls={
         "Bug Tracker": "https://github.com/clydedc/OpenSpy/issues",
         "Source Code": "https://github.com/clydedc/OpenSpy",
