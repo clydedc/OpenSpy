@@ -1,0 +1,18 @@
+{
+    "themes": [
+        {
+            "name": "ascii_kawaii",
+            "description": "A cute ASCII art theme",
+            "ascii_art": [
+                "  /\\_/\\",
+                " ( o.o )",
+                "  > ^ <"
+            ],
+            "colors": {
+                "background": "#FFCCFF",
+                "foreground": "#000000",
+                "highlight": "#FF66CC"
+            }
+        }
+    ]
+}

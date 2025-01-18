@@ -3,7 +3,8 @@ import json
 import time
 import os, sys
 import phonenumbers
-from phonenumbers import geocoder
+from phonenumbers import geocoder 
+from phonenumbers import carrier
 import whois
 from consolemenu import ConsoleMenu
 from consolemenu.items import FunctionItem
@@ -36,11 +37,13 @@ def main():
     item_allintext = FunctionItem(
         "Recherche allintext", lambda: effectuer_recherche(input("Entrez votre requête allintext: ")))
     item_whois = FunctionItem("Recherche WHOIS", rechercher_whois)
+    item_theme = FunctionItem("Changer le thème", lambda: change_theme(menu))
     menu.append_item(item_ip)
     menu.append_item(item_phone)
     menu.append_item(item_allintext)
     menu.append_item(item_dns)
     menu.append_item(item_whois)
+    menu.append_item(item_theme)
     menu.show()
 
 
@@ -64,6 +67,37 @@ def recherche_allintext(query):
         print(f"❌ | Une erreur s'est produite lors de la recherche : {e}")
         time.sleep(clock_time)
         return []
+
+
+def change_theme(menu):
+    """
+    Fonction pour changer le thème de l'application.
+    """
+    themes_file_path = os.path.join(os.path.dirname(__file__), 'themes.json')
+    
+    with open(themes_file_path, 'r') as f:
+        themes = json.load(f)["themes"]
+
+    print("🔍 | Thèmes disponibles :")
+    for idx, theme in enumerate(themes):
+        print(f"#{idx} - {theme['name']}")
+
+    try:
+        choix = int(input("Choisissez un thème (numéro) : "))
+        if 0 <= choix < len(themes):
+            theme_choisi = themes[choix]
+            print(f"\n🔍 | Thème sélectionné : {theme_choisi['name']}")
+            print("🔍 | Application du thème...")
+            menu.title = f"Menu principal 🔍 | OpenSpy | {theme_choisi['name']}"
+            if 'background_color' in theme_choisi:
+                os.system(f"echo -e '\033]11;{theme_choisi['background_color']}\007'")
+            if 'text_color' in theme_choisi:
+                os.system(f"echo -e '\033]10;{theme_choisi['text_color']}\007'")
+            print(f"Thème {theme_choisi['name']} appliqué avec succès !")
+        else:
+            print("❌ | Thème invalide.")
+    except ValueError:
+        print("❌ | Thème invalide.")
 
 
 def enregistrer_resultats(results):
@@ -163,13 +197,17 @@ def rechercher_whois():
 
 
 def phone_number():
-    number = input("Entrez le numéro de téléphone à rechercher : ")
     try:
-        parsed_number = phonenumbers.parse(number)
+        """
+        Fonction pour rechercher des informations sur un numéro de téléphone.
+        """
+        number = input("Entrez le numéro de téléphone : ")
+        parsed_number = phonenumbers.parse(number, "FR")
+        operator_name = carrier.name_for_number(parsed_number, 'fr')
+        print(f"🔍 | OpenSpy | Opérateur : {operator_name}")
         print(f"🔍 | OpenSpy | Indicatif pays : {parsed_number.country_code}")
         print(f"🔍 | OpenSpy | Numéro national : {parsed_number.national_number}")
         print(f"🔍 | OpenSpy | Région : {geocoder.description_for_number(parsed_number, 'fr')}")
-        print(f"🔍 | OpenSpy | Opérateur : {phonenumbers.carrier.name_for_number(parsed_number, 'fr')}")
         print(f"🔍 | OpenSpy | Possibilité de numéro valide : {phonenumbers.is_possible_number(parsed_number)}")
         print(f"🔍 | OpenSpy | Type de numéro : {phonenumbers.number_type(parsed_number)}")
         print(f"🔍 | OpenSpy | Possibilité de numéro valide : {phonenumbers.is_possible_number(parsed_number)}")
