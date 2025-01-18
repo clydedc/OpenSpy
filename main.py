@@ -3,6 +3,7 @@ import json
 import time
 import os, sys
 import phonenumbers
+from phonenumbers import geocoder
 import whois
 from consolemenu import ConsoleMenu
 from consolemenu.items import FunctionItem
@@ -167,6 +168,9 @@ def phone_number():
         parsed_number = phonenumbers.parse(number)
         print(f"🔍 | OpenSpy | Indicatif pays : {parsed_number.country_code}")
         print(f"🔍 | OpenSpy | Numéro national : {parsed_number.national_number}")
+        print(f"🔍 | OpenSpy | Région : {geocoder.description_for_number(parsed_number, 'fr')}")
+        print(f"🔍 | OpenSpy | Opérateur : {phonenumbers.carrier.name_for_number(parsed_number, 'fr')}")
+        print(f"🔍 | OpenSpy | Possibilité de numéro valide : {phonenumbers.is_possible_number(parsed_number)}")
         print(f"🔍 | OpenSpy | Type de numéro : {phonenumbers.number_type(parsed_number)}")
         print(f"🔍 | OpenSpy | Possibilité de numéro valide : {phonenumbers.is_possible_number(parsed_number)}")
         print(f"🔍 | OpenSpy | Valide : {phonenumbers.is_valid_number(parsed_number)}")
