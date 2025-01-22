@@ -34,8 +34,7 @@ def main():
     item_ip = FunctionItem("Recherche IP", rechercher_ip)
     item_phone = FunctionItem("Recherche numéro de téléphone", phone_number)
     item_dns = FunctionItem("Recherche DNS", dns_lookup)
-    item_allintext = FunctionItem(
-        "Recherche allintext", lambda: effectuer_recherche(input("Entrez votre requête allintext: ")))
+    item_allintext = FunctionItem("Recherche allintext", lambda: effectuer_recherche(input("Entrez votre requête allintext: ")))
     item_whois = FunctionItem("Recherche WHOIS", rechercher_whois)
     item_theme = FunctionItem("Changer le thème", lambda: change_theme(menu))
     menu.append_item(item_ip)
