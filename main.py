@@ -143,6 +143,9 @@ def effectuer_recherche(query):
             print(f"   ➡️ Titre : {result['title']}")
             print(f"   ➡️ Lien : {result['url']}")
             print(f"   ➡️ Extrait : {result['snippet']}\n")
+            print(f"⏰ | OpenSpy | Le résultat se supprimera au bout du temps déterminé choisi. ")
+            print("🔍 | OpenSpy | [LOG🟢] Appuyez sur Entrée pour revenir au menu...")
+            print("Merci de laisser une star sur le projet GitHub ⭐ : https://github/clydedc/OpenSpy")
         choix = input("Voulez-vous enregistrer ces résultats dans un fichier ? (oui/non) : ").strip().lower()
         if choix == "oui":
             enregistrer_resultats(formatted_results)
