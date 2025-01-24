@@ -30,6 +30,11 @@ def main():
     """
     Menu principal de l'application.
     """
+    if not API_KEY or not CSE_ID:
+       print("🔍 | OpenSpy | [LOG🔴] Veuillez définir votre clé API et votre identifiant de moteur de recherche dans le fichier main.py.")
+    sys.exit(1)
+    if not os.path.exists("save"):
+        os.makedirs("save")
     menu = ConsoleMenu("Menu principal 🔍 | OpenSpy ")
     item_ip = FunctionItem("Recherche IP", rechercher_ip)
     item_phone = FunctionItem("Recherche numéro de téléphone", phone_number)
