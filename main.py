@@ -1,4 +1,4 @@
-# i don't habe any idea anymore make a pull request
+# i don't have any idea anymore make a pull request
 
 import requests
 import json
